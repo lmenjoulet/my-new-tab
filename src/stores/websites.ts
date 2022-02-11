@@ -1,5 +1,11 @@
 import type { WebsiteCategory } from "../types";
-import { Writable, writable } from "svelte/store";
+import { readable, Writable, writable } from "svelte/store";
 
 export const websiteCategories: Writable<WebsiteCategory[]> = writable([
 ]);
+
+export const globals = readable(
+    {
+        FAVORITES: "favorites"
+    }
+)
