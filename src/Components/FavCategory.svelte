@@ -10,24 +10,11 @@
             </svg>
         </button>
     </h2>
-    <ul>
+    <ul class="fav-list">
         {#each websiteCategory.sites as site}
-            <FavLink site={site} category={websiteCategory}></FavLink>					
+            <FavLink type="display" site={site} category={websiteCategory}></FavLink>					
         {/each}
-            <li class="favForm">
-                <form on:submit|preventDefault={addFav}>
-                    <div class="favInputs">
-                        <input type="text" name="favName" placeholder="Name" required>
-                        <input type="url" name="favLink" placeholder="https://my.link" required>
-                        <input type="hidden" name="favCategory" value="{JSON.stringify(websiteCategory)}" />
-                    </div>
-                    <button type="submit">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
-                          </svg>
-                    </button>
-                </form>
-            </li>
+			<FavLink type="create" site={undefined} category={websiteCategory}></FavLink>
     </ul>
     {:else if type == "create"}
     <h2 class="create_category">
@@ -62,29 +49,6 @@
 		categoryName = "";
 		setFavs();
 	}
-    
-    function addFav(e): void{
-		
-		const formData = new FormData(e.target);
-		const data: any = {};
-		for (let field of formData) {
-		const [key, value] = field;
-			data[key] = value;
-		}
-		
-		const newFav: Website = {
-			name: data.favName,
-			link: data.favLink
-		};
-		$websiteCategories[
-			$websiteCategories.findIndex(() => { 
-				return JSON.parse(data.favCategory)
-			})
-		].sites.push(newFav);
-
-		setFavs();
-
-	}
 
 	function getFavs(): void{
 		if(localStorage.getItem($globals.FAVORITES)){
@@ -110,12 +74,8 @@
 </script>
 
 <style>
-    form{
-		display: flex;
-	}
 
     button{
-		height: 2rem;
 		background: none;
 		border: none;
 		color: var(--fg);
@@ -166,30 +126,8 @@
 		margin: 0;
 		padding-left: 0;
 	}
-	.category li{
-		margin: 0.5rem;
-	}
 
-	.favForm{
-		display: flex;
-	}
-
-    .favForm form button{
-        text-align: center;
-        height: 1rem;
-        margin-left: auto;
-		background: none;
-		border: none;
-		color: var(--fg);
-		filter: drop-shadow(2px 2px 2px #000000);
-        margin-right: 0;
-	}
-
-    .favForm form svg{
-        height: 1rem;
-    }
-
-	.favInputs{
+	.fav-list{
 		display: flex;
 		flex-direction: column;
 	}
